@@ -33,13 +33,14 @@ namespace EmguCVDemoApp
             this.toolStripMenuItemFile = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemProcess = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemShapeMatching = new System.Windows.Forms.ToolStripMenuItem();
+            this.COVID19Test = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblMessage = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.COVID19Test = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemPregnancyTest = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -51,7 +52,7 @@ namespace EmguCVDemoApp
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemFile,
-            this.toolStripMenuItem1});
+            this.toolStripMenuItemProcess});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1060, 28);
@@ -80,14 +81,15 @@ namespace EmguCVDemoApp
             this.toolStripMenuItemExit.Size = new System.Drawing.Size(128, 26);
             this.toolStripMenuItemExit.Text = "Exit";
             // 
-            // toolStripMenuItem1
+            // toolStripMenuItemProcess
             // 
-            this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemProcess.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemShapeMatching,
-            this.COVID19Test});
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(72, 24);
-            this.toolStripMenuItem1.Text = "Process";
+            this.COVID19Test,
+            this.toolStripMenuItemPregnancyTest});
+            this.toolStripMenuItemProcess.Name = "toolStripMenuItemProcess";
+            this.toolStripMenuItemProcess.Size = new System.Drawing.Size(72, 24);
+            this.toolStripMenuItemProcess.Text = "Process";
             // 
             // toolStripMenuItemShapeMatching
             // 
@@ -95,6 +97,13 @@ namespace EmguCVDemoApp
             this.toolStripMenuItemShapeMatching.Size = new System.Drawing.Size(199, 26);
             this.toolStripMenuItemShapeMatching.Text = "Shape Matching";
             this.toolStripMenuItemShapeMatching.Click += new System.EventHandler(this.toolStripMenuItemShapeMatching_Click);
+            // 
+            // COVID19Test
+            // 
+            this.COVID19Test.Name = "COVID19Test";
+            this.COVID19Test.Size = new System.Drawing.Size(199, 26);
+            this.COVID19Test.Text = "COVID-19 Test";
+            this.COVID19Test.Click += new System.EventHandler(this.COVID19Test_Click);
             // 
             // panel1
             // 
@@ -133,12 +142,12 @@ namespace EmguCVDemoApp
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // COVID19Test
+            // toolStripMenuItemPregnancyTest
             // 
-            this.COVID19Test.Name = "COVID19Test";
-            this.COVID19Test.Size = new System.Drawing.Size(199, 26);
-            this.COVID19Test.Text = "COVID-19 Test";
-            this.COVID19Test.Click += new System.EventHandler(this.COVID19Test_Click);
+            this.toolStripMenuItemPregnancyTest.Name = "toolStripMenuItemPregnancyTest";
+            this.toolStripMenuItemPregnancyTest.Size = new System.Drawing.Size(199, 26);
+            this.toolStripMenuItemPregnancyTest.Text = "Pregnancy Test";
+            this.toolStripMenuItemPregnancyTest.Click += new System.EventHandler(this.toolStripMenuItemPregnancyTest_Click);
             // 
             // Form1
             // 
@@ -174,9 +183,10 @@ namespace EmguCVDemoApp
         private System.Windows.Forms.Label lblMessage;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemProcess;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemShapeMatching;
         private System.Windows.Forms.ToolStripMenuItem COVID19Test;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPregnancyTest;
     }
 }
 

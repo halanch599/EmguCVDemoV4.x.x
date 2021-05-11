@@ -237,5 +237,135 @@ namespace EmguCVDemoApp
                 throw new Exception(ex.Message);
             }
         }
+
+        private void toolStripMenuItemPregnancyTest_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!IMGDict.ContainsKey("input"))
+                {
+                    throw new Exception("Read an image");
+                }
+
+                double threshold = 300;
+
+                var img = IMGDict["input"].Clone().SmoothGaussian(3);
+                var binary = img.Convert<Gray, byte>()
+                    .ThresholdBinaryInv(new Gray(240), new Gray(255));
+
+                VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint();
+                VectorOfVectorOfPoint filteredContours = new VectorOfVectorOfPoint();
+                Mat hierarchy = new Mat();
+
+                CvInvoke.FindContours(binary, contours, hierarchy, RetrType.External, ChainApproxMethod.ChainApproxSimple);
+
+                var output = binary.CopyBlank();
+
+                for (int i = 0; i < contours.Size; i++)
+                {
+                    var area = CvInvoke.ContourArea(contours[i]);
+                    if (area>threshold)
+                    {
+                        filteredContours.Push(contours[i]);
+                        //CvInvoke.DrawContours(output, contours, i, new MCvScalar(255), 2);
+                    }
+                }
+
+                for (int i = 0; i < filteredContours.Size; i++)
+                {
+                    var bbox = CvInvoke.BoundingRectangle(filteredContours[i]);
+                    binary.ROI = bbox;
+                    var rects = ProcessParts(binary);
+                    binary.ROI = Rectangle.Empty;
+
+                    int count = rects.Count;
+
+                    string msg = "";
+                    int marin = 25;
+                    MCvScalar color = new MCvScalar(0, 255, 0);
+
+                    switch (count)
+                    {
+                        case 1:
+                            msg = "Invalid";
+                            color = new MCvScalar(0, 0, 255);
+                            break;
+
+                        case 2:
+                            if (rects[0].Width*rects[0].Height < rects[1].Width * rects[1].Height)
+                            {
+                                msg = "Not Pregnant";
+                            }
+                            else
+                            {
+                                msg = "Invalid";
+                            }
+                            color = new MCvScalar(0, 0, 255);
+                            break;
+                        case 3:
+                            msg = "Pregnant";
+                            color = new MCvScalar(0, 255, 0);
+                            break;
+
+                        default:
+                            msg = "Invalid/Not pregnant";
+                            color = new MCvScalar(0, 0, 255);
+                            break;
+                    }
+                    CvInvoke.PutText(img, msg, new Point(bbox.X + bbox.Width + marin, bbox.Y + marin),
+                        FontFace.HersheyPlain, 1.5, color, 2);
+                }
+                // add Cv.Binary
+                pictureBox1.Image = img.ToBitmap();
+                
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private List<Rectangle> ProcessParts(Image<Gray, byte> img)
+        {
+            try
+            {
+                double areaThreshold = 200;
+                Rectangle rectangle = Rectangle.Empty;
+                img._Not();
+
+                var contours = new VectorOfVectorOfPoint();
+                var h = new Mat();
+                CvInvoke.FindContours(img, contours, h, RetrType.External, ChainApproxMethod.ChainApproxSimple);
+
+                List<Rectangle> bboxes = new List<Rectangle>();
+
+                for (int i = 0; i < contours.Size; i++)
+                {
+                    var area = CvInvoke.ContourArea(contours[i]);
+                    if (area>areaThreshold)
+                    {
+                        bboxes.Add(CvInvoke.BoundingRectangle(contours[i]));
+                    }
+                }
+
+                var sortedBboxes = bboxes.OrderBy(b => b.X).ToList();
+
+                if (sortedBboxes.Count>2)
+                {
+                    sortedBboxes.RemoveRange(sortedBboxes.Count - 2, 2);
+                }
+                else
+                {
+                    sortedBboxes.Clear();
+                }
+                return sortedBboxes;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
