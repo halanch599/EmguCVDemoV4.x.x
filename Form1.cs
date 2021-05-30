@@ -367,5 +367,120 @@ namespace EmguCVDemoApp
                 throw new Exception(ex.Message);
             }
         }
+
+        private void TextLineSegmentation_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!IMGDict.ContainsKey("input"))
+                {
+                    throw new Exception("Please read an image.");
+                }
+                var img = IMGDict["input"].Clone();
+                var rotatedImage = deskewImage(img);
+
+                (var img2, var bboxes) = detectTextSegments(rotatedImage);
+
+                var kernel = Mat.Ones(3, 3, DepthType.Cv8U, 1);
+                var mask = rotatedImage[0].CopyBlank();
+                var imgoutput = rotatedImage.CopyBlank() + 255;
+                int counter = 0;
+                foreach (var box in bboxes)
+                {
+                    mask.Draw(box, new Gray(255), -1);
+                    rotatedImage.ROI = box;
+                    (var img3, var wordboxes) = detectTextSegments(rotatedImage, kernel);
+                    img3.ROI = Rectangle.Empty;
+                    rotatedImage.ROI = Rectangle.Empty;
+                    imgoutput._And(img3);
+                    counter += wordboxes.Count;
+                }
+
+                CvInvoke.PutText(imgoutput, "Words = " + counter.ToString(), new Point(10, 20), FontFace.HersheyPlain,
+                    1.5, new MCvScalar(0, 255, 0), 2);
+                pictureBox1.Image = imgoutput.ToBitmap();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private (Image<Bgr, byte>, List<Rectangle>) detectTextSegments(Image<Bgr, byte> img, Mat kernel = null)
+        {
+            try
+            {
+                if (kernel == null)
+                {
+                    kernel = Mat.Ones(3, 9, DepthType.Cv8U, 1);
+                }
+
+                var binary = img.Convert<Gray, byte>()
+                    .ThresholdBinaryInv(new Gray(240), new Gray(255))
+                    .MorphologyEx(MorphOp.Dilate, kernel, new Point(-1, -1), 1, BorderType.Default, new MCvScalar(255));
+
+                var temp = img.Clone();
+
+                var conours = new VectorOfVectorOfPoint();
+                var h = new Mat();
+                CvInvoke.FindContours(binary, conours, h, RetrType.External, ChainApproxMethod.ChainApproxSimple);
+
+                var bboxes = new List<Rectangle>();
+                for (int i = 0; i < conours.Size; i++)
+                {
+                    var bbox = CvInvoke.BoundingRectangle(conours[i]);
+                    bboxes.Add(bbox);
+                    CvInvoke.Rectangle(temp, bbox, new MCvScalar(0, 0, 255), 2);
+                }
+                bboxes = bboxes.OrderBy(x => x.Y).ToList();
+                return (temp, bboxes);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+        }
+        private Image<Bgr, byte> deskewImage(Image<Bgr, byte> img)
+        {
+            try
+            {
+                var SE = Mat.Ones(15, 15, DepthType.Cv8U, 1);
+                var binary = img.Convert<Gray, byte>()
+                    .SmoothGaussian(3)
+                    .ThresholdBinaryInv(new Gray(240), new Gray(255))
+                    .MorphologyEx(MorphOp.Dilate, SE, new Point(-1, -1), 1, BorderType.Default, new MCvScalar(0))
+                    .Erode(1);
+
+                var points = new VectorOfPoint();
+                CvInvoke.FindNonZero(binary, points);
+                var minAreaRect = CvInvoke.MinAreaRect(points);
+
+                var rotationMatrix = new Mat(2, 3, DepthType.Cv32F, 1);
+                var rotatedImage = img.CopyBlank();
+
+                //var corners = CvInvoke.BoxPoints(minAreaRect).Select(x => new Point((int)x.X, (int)x.Y)).ToArray();
+
+                //for (int i = 0; i < corners.Length; i++)
+                //{
+                //    CvInvoke.Line(img, corners[i], corners[(i + 1)%4], new MCvScalar(0, 255, 0), 2);
+                //    CvInvoke.PutText(img, i.ToString(), corners[i], FontFace.HersheySimplex, 1.0, new MCvScalar(0, 0, 255), 3);
+                //    CvInvoke.Circle(img, corners[i], 3, new MCvScalar(255, 0, 0), 5);
+                //}
+
+                var angle = minAreaRect.Angle < 45 ? minAreaRect.Angle : minAreaRect.Angle - 90;
+
+                CvInvoke.GetRotationMatrix2D(minAreaRect.Center, angle, 1.0, rotationMatrix);
+                CvInvoke.WarpAffine(img, rotatedImage, rotationMatrix, img.Size,borderMode:BorderType.Replicate);
+
+                //pictureBox1.Image = rotatedImage.ToBitmap();
+                return rotatedImage;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
