@@ -13,6 +13,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Dnn;
+using System.IO;
 
 namespace EmguCVDemoApp
 {
@@ -701,6 +702,77 @@ namespace EmguCVDemoApp
                 }
                 //CV.BitMap
                 pictureBox1.Image = img.ToBitmap();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void ObjectDetectionMaskRCNN_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!IMGDict.ContainsKey("input"))
+                {
+                    throw new Exception("Read an image first");
+                }
+
+                var img = IMGDict["input"].Clone().SmoothGaussian(3);
+                var blob = DnnInvoke.BlobFromImage(img, 1.0, img.Size, swapRB: true);
+
+
+                var modelpath = @"F:\maskrcnn\frozen_inference_graph.pb";
+                var configpath = @"F:\maskrcnn\mask_rcnn_inception_v2_coco_2018_01_28.pbtxt";
+                var coconames = @"F:\maskrcnn\coco-labels-paper.names";
+
+                var net = DnnInvoke.ReadNetFromTensorflow(modelpath, configpath);
+                net.SetPreferableBackend(Emgu.CV.Dnn.Backend.OpenCV);
+                net.SetPreferableTarget(Target.Cpu);
+
+                var classes = File.ReadAllLines(coconames);
+
+                net.SetInput(blob);
+
+                VectorOfMat output = new VectorOfMat();
+                string[] outnames = new string[] {"detection_out_final","detection_masks" };
+                net.Forward(output, outnames);
+
+                int numdetections = output[0].SizeOfDimension[2];
+                int numclasses = output[1].SizeOfDimension[1];
+
+                var bboxes = output[0].GetData();
+                var masks = output[1].GetData();
+
+                for (int i = 0; i < numdetections; i++)
+                {
+                    float score = (float)bboxes.GetValue(0, 0, i, 2);
+                    if (score>0.5)
+                    {
+                        int classid = Convert.ToInt32( bboxes.GetValue(0, 0, i, 1));
+                        int left = Convert.ToInt32((float)bboxes.GetValue(0, 0, i, 3)*img.Cols);
+                        int top = Convert.ToInt32((float)bboxes.GetValue(0, 0, i, 4) * img.Rows);
+                        int right = Convert.ToInt32((float)bboxes.GetValue(0, 0, i, 5) * img.Cols);
+                        int bottom = Convert.ToInt32((float)bboxes.GetValue(0, 0, i, 6) * img.Rows);
+
+
+                        left = Math.Max(0, Math.Min(left, img.Cols - 1));
+                        right= Math.Max(0, Math.Min(right, img.Cols - 1));
+
+                        top = Math.Max(0, Math.Min(top, img.Rows- 1));
+                        bottom= Math.Max(0, Math.Min(bottom, img.Rows - 1));
+
+                        Rectangle rectangle = new Rectangle(left, top, right - left + 1, bottom - top + 1);
+                        img.Draw(rectangle, new Bgr(0, 0, 255), 2);
+                        var labels = classes[classid];
+                        CvInvoke.PutText(img, labels, new Point(left, top - 10), FontFace.HersheySimplex, 
+                            1.0, new MCvScalar(0, 255, 0), 2);
+
+                    }
+                }
+
+                pictureBox1.Image = img.ToBitmap();
+
             }
             catch (Exception ex)
             {

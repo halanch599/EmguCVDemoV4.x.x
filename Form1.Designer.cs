@@ -39,11 +39,12 @@ namespace EmguCVDemoApp
             this.toolStripMenuItemPregnancyTest = new System.Windows.Forms.ToolStripMenuItem();
             this.TextLineSegmentation = new System.Windows.Forms.ToolStripMenuItem();
             this.PoseEstimationBody_25 = new System.Windows.Forms.ToolStripMenuItem();
+            this.HandPoseEstimation = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblMessage = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.HandPoseEstimation = new System.Windows.Forms.ToolStripMenuItem();
+            this.ObjectDetectionMaskRCNN = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -92,7 +93,8 @@ namespace EmguCVDemoApp
             this.toolStripMenuItemPregnancyTest,
             this.TextLineSegmentation,
             this.PoseEstimationBody_25,
-            this.HandPoseEstimation});
+            this.HandPoseEstimation,
+            this.ObjectDetectionMaskRCNN});
             this.toolStripMenuItemProcess.Name = "toolStripMenuItemProcess";
             this.toolStripMenuItemProcess.Size = new System.Drawing.Size(72, 24);
             this.toolStripMenuItemProcess.Text = "Process";
@@ -100,37 +102,44 @@ namespace EmguCVDemoApp
             // toolStripMenuItemShapeMatching
             // 
             this.toolStripMenuItemShapeMatching.Name = "toolStripMenuItemShapeMatching";
-            this.toolStripMenuItemShapeMatching.Size = new System.Drawing.Size(256, 26);
+            this.toolStripMenuItemShapeMatching.Size = new System.Drawing.Size(283, 26);
             this.toolStripMenuItemShapeMatching.Text = "Shape Matching";
             this.toolStripMenuItemShapeMatching.Click += new System.EventHandler(this.toolStripMenuItemShapeMatching_Click);
             // 
             // COVID19Test
             // 
             this.COVID19Test.Name = "COVID19Test";
-            this.COVID19Test.Size = new System.Drawing.Size(256, 26);
+            this.COVID19Test.Size = new System.Drawing.Size(283, 26);
             this.COVID19Test.Text = "COVID-19 Test";
             this.COVID19Test.Click += new System.EventHandler(this.COVID19Test_Click);
             // 
             // toolStripMenuItemPregnancyTest
             // 
             this.toolStripMenuItemPregnancyTest.Name = "toolStripMenuItemPregnancyTest";
-            this.toolStripMenuItemPregnancyTest.Size = new System.Drawing.Size(256, 26);
+            this.toolStripMenuItemPregnancyTest.Size = new System.Drawing.Size(283, 26);
             this.toolStripMenuItemPregnancyTest.Text = "Pregnancy Test";
             this.toolStripMenuItemPregnancyTest.Click += new System.EventHandler(this.toolStripMenuItemPregnancyTest_Click);
             // 
             // TextLineSegmentation
             // 
             this.TextLineSegmentation.Name = "TextLineSegmentation";
-            this.TextLineSegmentation.Size = new System.Drawing.Size(256, 26);
+            this.TextLineSegmentation.Size = new System.Drawing.Size(283, 26);
             this.TextLineSegmentation.Text = "Text Line Segmentation";
             this.TextLineSegmentation.Click += new System.EventHandler(this.TextLineSegmentation_Click);
             // 
             // PoseEstimationBody_25
             // 
             this.PoseEstimationBody_25.Name = "PoseEstimationBody_25";
-            this.PoseEstimationBody_25.Size = new System.Drawing.Size(256, 26);
+            this.PoseEstimationBody_25.Size = new System.Drawing.Size(283, 26);
             this.PoseEstimationBody_25.Text = "Pose Estimation Body_25";
             this.PoseEstimationBody_25.Click += new System.EventHandler(this.PoseEstimationBody_25_Click);
+            // 
+            // HandPoseEstimation
+            // 
+            this.HandPoseEstimation.Name = "HandPoseEstimation";
+            this.HandPoseEstimation.Size = new System.Drawing.Size(283, 26);
+            this.HandPoseEstimation.Text = "Hand Pose Estimation";
+            this.HandPoseEstimation.Click += new System.EventHandler(this.HandPoseEstimation_Click);
             // 
             // panel1
             // 
@@ -169,12 +178,12 @@ namespace EmguCVDemoApp
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // HandPoseEstimation
+            // ObjectDetectionMaskRCNN
             // 
-            this.HandPoseEstimation.Name = "HandPoseEstimation";
-            this.HandPoseEstimation.Size = new System.Drawing.Size(256, 26);
-            this.HandPoseEstimation.Text = "Hand Pose Estimation";
-            this.HandPoseEstimation.Click += new System.EventHandler(this.HandPoseEstimation_Click);
+            this.ObjectDetectionMaskRCNN.Name = "ObjectDetectionMaskRCNN";
+            this.ObjectDetectionMaskRCNN.Size = new System.Drawing.Size(283, 26);
+            this.ObjectDetectionMaskRCNN.Text = "Object Detection MaskRCNN";
+            this.ObjectDetectionMaskRCNN.Click += new System.EventHandler(this.ObjectDetectionMaskRCNN_Click);
             // 
             // Form1
             // 
@@ -217,6 +226,7 @@ namespace EmguCVDemoApp
         private System.Windows.Forms.ToolStripMenuItem TextLineSegmentation;
         private System.Windows.Forms.ToolStripMenuItem PoseEstimationBody_25;
         private System.Windows.Forms.ToolStripMenuItem HandPoseEstimation;
+        private System.Windows.Forms.ToolStripMenuItem ObjectDetectionMaskRCNN;
     }
 }
 
