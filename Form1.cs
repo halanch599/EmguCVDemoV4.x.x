@@ -625,5 +625,87 @@ namespace EmguCVDemoApp
                 MessageBox.Show(ex.Message);
             }
         }
+
+        private void HandPoseEstimation_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!IMGDict.ContainsKey("input"))
+                {
+                    throw new Exception("Read an image first.");
+                }
+
+
+                var img = IMGDict["input"].Clone().SmoothGaussian(3);
+                var blob = DnnInvoke.BlobFromImage(img, 1.0 / 255.0, new Size(368, 368), new MCvScalar(0, 0, 0));
+
+                string prototxt = @"F:\openpose\models\hand\pose_deploy.prototxt";
+                string modelpath = @"F:\openpose\models\hand\pose_iter_102000.caffemodel";
+
+                var net = DnnInvoke.ReadNetFromCaffe(prototxt, modelpath);
+
+                net.SetInput(blob);
+                net.SetPreferableBackend(Emgu.CV.Dnn.Backend.OpenCV);
+
+                var output = net.Forward();
+
+                var H = output.SizeOfDimension[2];
+                var W = output.SizeOfDimension[3];
+
+                var probMap = output.GetData();
+
+                int nPoints = 22;
+                int[,] POSE_PAIRS = new int[,] { { 0, 1 }, { 1, 2 }, { 2, 3 }, { 3, 4 }, { 0, 5 }, { 5, 6 }, { 6, 7 }, 
+                    { 7, 8 }, { 0, 9 }, { 9, 10 }, { 10, 11 }, { 11, 12 }, { 0, 13 }, { 13, 14 }, { 14, 15 }, { 15, 16 }, 
+                    { 0, 17 }, { 17, 18 }, { 18, 19 }, { 19, 20 } };
+
+                var points = new List<Point>();
+
+                for (int i = 0; i < nPoints; i++)
+                {
+                    Matrix<float> matrix = new Matrix<float>(H, W);
+                    for (int row = 0; row < H; row++)
+                    {
+                        for (int col = 0; col < W; col++)
+                        {
+                            matrix[row, col] = (float)probMap.GetValue(0, i, row, col);
+                        }
+                    }
+
+
+                    double minVal=0, maxVal=0;
+                    Point minLoc = default, maxLoc = default;
+                    CvInvoke.MinMaxLoc(matrix, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
+
+                    var x = (img.Width * maxLoc.X) / W;
+                    var y = (img.Height * maxLoc.Y) / H;
+
+                    var p = new Point(x, y);
+                    points.Add(p);
+                    CvInvoke.Circle(img, p, 5, new MCvScalar(0, 255, 0), -1);
+                    CvInvoke.PutText(img, i.ToString(), p, FontFace.HersheySimplex, 0.5, new MCvScalar(0, 0, 255), 2);
+                }
+
+
+                // draw skeleton
+
+                for (int i = 0; i < POSE_PAIRS.GetLongLength(0); i++)
+                {
+                    var startIndex = POSE_PAIRS[i, 0];
+                    var endIndex = POSE_PAIRS[i, 1];
+
+                    if (points.Contains(points[startIndex]) && points.Contains(points[endIndex]))
+                    {
+                        CvInvoke.Line(img, points[startIndex], points[endIndex], new MCvScalar(255, 0, 0), 2);
+                    }
+                }
+                //CV.BitMap
+                pictureBox1.Image = img.ToBitmap();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 }
