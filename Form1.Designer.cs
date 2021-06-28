@@ -40,11 +40,13 @@ namespace EmguCVDemoApp
             this.TextLineSegmentation = new System.Windows.Forms.ToolStripMenuItem();
             this.PoseEstimationBody_25 = new System.Windows.Forms.ToolStripMenuItem();
             this.HandPoseEstimation = new System.Windows.Forms.ToolStripMenuItem();
+            this.ObjectDetectionMaskRCNN = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblMessage = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.ObjectDetectionMaskRCNN = new System.Windows.Forms.ToolStripMenuItem();
+            this.objectDetectionMaskRCNNVideoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.readVideoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -67,7 +69,8 @@ namespace EmguCVDemoApp
             // 
             this.toolStripMenuItemFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemOpen,
-            this.toolStripMenuItemExit});
+            this.toolStripMenuItemExit,
+            this.readVideoToolStripMenuItem});
             this.toolStripMenuItemFile.Name = "toolStripMenuItemFile";
             this.toolStripMenuItemFile.Size = new System.Drawing.Size(46, 24);
             this.toolStripMenuItemFile.Text = "File";
@@ -75,8 +78,8 @@ namespace EmguCVDemoApp
             // toolStripMenuItemOpen
             // 
             this.toolStripMenuItemOpen.Name = "toolStripMenuItemOpen";
-            this.toolStripMenuItemOpen.Size = new System.Drawing.Size(128, 26);
-            this.toolStripMenuItemOpen.Text = "Open";
+            this.toolStripMenuItemOpen.Size = new System.Drawing.Size(224, 26);
+            this.toolStripMenuItemOpen.Text = "Read Image";
             this.toolStripMenuItemOpen.Click += new System.EventHandler(this.toolStripMenuItemOpen_Click);
             // 
             // toolStripMenuItemExit
@@ -94,7 +97,8 @@ namespace EmguCVDemoApp
             this.TextLineSegmentation,
             this.PoseEstimationBody_25,
             this.HandPoseEstimation,
-            this.ObjectDetectionMaskRCNN});
+            this.ObjectDetectionMaskRCNN,
+            this.objectDetectionMaskRCNNVideoToolStripMenuItem});
             this.toolStripMenuItemProcess.Name = "toolStripMenuItemProcess";
             this.toolStripMenuItemProcess.Size = new System.Drawing.Size(72, 24);
             this.toolStripMenuItemProcess.Text = "Process";
@@ -102,44 +106,51 @@ namespace EmguCVDemoApp
             // toolStripMenuItemShapeMatching
             // 
             this.toolStripMenuItemShapeMatching.Name = "toolStripMenuItemShapeMatching";
-            this.toolStripMenuItemShapeMatching.Size = new System.Drawing.Size(283, 26);
+            this.toolStripMenuItemShapeMatching.Size = new System.Drawing.Size(326, 26);
             this.toolStripMenuItemShapeMatching.Text = "Shape Matching";
             this.toolStripMenuItemShapeMatching.Click += new System.EventHandler(this.toolStripMenuItemShapeMatching_Click);
             // 
             // COVID19Test
             // 
             this.COVID19Test.Name = "COVID19Test";
-            this.COVID19Test.Size = new System.Drawing.Size(283, 26);
+            this.COVID19Test.Size = new System.Drawing.Size(326, 26);
             this.COVID19Test.Text = "COVID-19 Test";
             this.COVID19Test.Click += new System.EventHandler(this.COVID19Test_Click);
             // 
             // toolStripMenuItemPregnancyTest
             // 
             this.toolStripMenuItemPregnancyTest.Name = "toolStripMenuItemPregnancyTest";
-            this.toolStripMenuItemPregnancyTest.Size = new System.Drawing.Size(283, 26);
+            this.toolStripMenuItemPregnancyTest.Size = new System.Drawing.Size(326, 26);
             this.toolStripMenuItemPregnancyTest.Text = "Pregnancy Test";
             this.toolStripMenuItemPregnancyTest.Click += new System.EventHandler(this.toolStripMenuItemPregnancyTest_Click);
             // 
             // TextLineSegmentation
             // 
             this.TextLineSegmentation.Name = "TextLineSegmentation";
-            this.TextLineSegmentation.Size = new System.Drawing.Size(283, 26);
+            this.TextLineSegmentation.Size = new System.Drawing.Size(326, 26);
             this.TextLineSegmentation.Text = "Text Line Segmentation";
             this.TextLineSegmentation.Click += new System.EventHandler(this.TextLineSegmentation_Click);
             // 
             // PoseEstimationBody_25
             // 
             this.PoseEstimationBody_25.Name = "PoseEstimationBody_25";
-            this.PoseEstimationBody_25.Size = new System.Drawing.Size(283, 26);
+            this.PoseEstimationBody_25.Size = new System.Drawing.Size(326, 26);
             this.PoseEstimationBody_25.Text = "Pose Estimation Body_25";
             this.PoseEstimationBody_25.Click += new System.EventHandler(this.PoseEstimationBody_25_Click);
             // 
             // HandPoseEstimation
             // 
             this.HandPoseEstimation.Name = "HandPoseEstimation";
-            this.HandPoseEstimation.Size = new System.Drawing.Size(283, 26);
+            this.HandPoseEstimation.Size = new System.Drawing.Size(326, 26);
             this.HandPoseEstimation.Text = "Hand Pose Estimation";
             this.HandPoseEstimation.Click += new System.EventHandler(this.HandPoseEstimation_Click);
+            // 
+            // ObjectDetectionMaskRCNN
+            // 
+            this.ObjectDetectionMaskRCNN.Name = "ObjectDetectionMaskRCNN";
+            this.ObjectDetectionMaskRCNN.Size = new System.Drawing.Size(326, 26);
+            this.ObjectDetectionMaskRCNN.Text = "Object Detection MaskRCNN";
+            this.ObjectDetectionMaskRCNN.Click += new System.EventHandler(this.ObjectDetectionMaskRCNN_Click);
             // 
             // panel1
             // 
@@ -178,12 +189,19 @@ namespace EmguCVDemoApp
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // ObjectDetectionMaskRCNN
+            // objectDetectionMaskRCNNVideoToolStripMenuItem
             // 
-            this.ObjectDetectionMaskRCNN.Name = "ObjectDetectionMaskRCNN";
-            this.ObjectDetectionMaskRCNN.Size = new System.Drawing.Size(283, 26);
-            this.ObjectDetectionMaskRCNN.Text = "Object Detection MaskRCNN";
-            this.ObjectDetectionMaskRCNN.Click += new System.EventHandler(this.ObjectDetectionMaskRCNN_Click);
+            this.objectDetectionMaskRCNNVideoToolStripMenuItem.Name = "objectDetectionMaskRCNNVideoToolStripMenuItem";
+            this.objectDetectionMaskRCNNVideoToolStripMenuItem.Size = new System.Drawing.Size(326, 26);
+            this.objectDetectionMaskRCNNVideoToolStripMenuItem.Text = "Object Detection MaskRCNN Video";
+            this.objectDetectionMaskRCNNVideoToolStripMenuItem.Click += new System.EventHandler(this.objectDetectionMaskRCNNVideoToolStripMenuItem_Click);
+            // 
+            // readVideoToolStripMenuItem
+            // 
+            this.readVideoToolStripMenuItem.Name = "readVideoToolStripMenuItem";
+            this.readVideoToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.readVideoToolStripMenuItem.Text = "Read Video";
+            this.readVideoToolStripMenuItem.Click += new System.EventHandler(this.readVideoToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -227,6 +245,8 @@ namespace EmguCVDemoApp
         private System.Windows.Forms.ToolStripMenuItem PoseEstimationBody_25;
         private System.Windows.Forms.ToolStripMenuItem HandPoseEstimation;
         private System.Windows.Forms.ToolStripMenuItem ObjectDetectionMaskRCNN;
+        private System.Windows.Forms.ToolStripMenuItem objectDetectionMaskRCNNVideoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem readVideoToolStripMenuItem;
     }
 }
 
